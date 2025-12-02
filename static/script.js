@@ -17,7 +17,7 @@ async function analyzeText() {
         const formData = new FormData();
         formData.append("text", text);
 
-        // 🔹 Replace this URL with your deployed FastAPI backend
+        // 🔹 Use Render backend here
         const backendURL = "https://real-vs-fake-api.onrender.com/predict";
 
         const response = await fetch(backendURL, {

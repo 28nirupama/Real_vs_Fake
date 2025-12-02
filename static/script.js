@@ -1,53 +1,57 @@
 document.getElementById("detectBtn").addEventListener("click", analyzeText);
 
 async function analyzeText() {
-    const text = document.getElementById("inputText").value.trim();
-    const resultDiv = document.getElementById("result");
-    const loading = document.getElementById("loading");
+const text = document.getElementById("inputText").value.trim();
+const resultDiv = document.getElementById("result");
+const loading = document.getElementById("loading");
 
-    if (text.length < 5) {
-        resultDiv.style.display = "block";
-        resultDiv.className = "result-error";
-        resultDiv.innerText = "Please enter at least 5 characters.";
-        return;
-    }
+```
+if (text.length < 5) {
+    resultDiv.style.display = "block";
+    resultDiv.className = "result-error";
+    resultDiv.innerText = "Please enter at least 5 characters.";
+    return;
+}
 
-    resultDiv.style.display = "none";
-    loading.style.display = "block";
+resultDiv.style.display = "none";
+loading.style.display = "block";
 
-    try {
-        const formData = new FormData();
-        formData.append("text", text);
+try {
+    const formData = new FormData();
+    formData.append("text", text);
 
-        const response = await fetch("https://your-backend-url.com/predict", {
+    const response = await fetch("https://your-backend-url.com/predict", {
         method: "POST",
         body: formData
-        });
+    });
 
-        });
+    // Removed extra closing bracket here
 
-        const data = await response.json();
+    const data = await response.json();
 
-        loading.style.display = "none";
-        resultDiv.style.display = "block";
+    loading.style.display = "none";
+    resultDiv.style.display = "block";
 
-        if (data.prediction === "human") {
-            resultDiv.className = "result-human";
-            resultDiv.innerHTML = `✅ Text etected as: HUMAN<br>${data.funny_response}`;
-        } 
-        else if (data.prediction === "ai") {
-            resultDiv.className = "result-ai";
-            resultDiv.innerHTML = `🤖 Text detected as: AI<br>${data.funny_response}`;
-        } 
-        else {
-            resultDiv.className = "result-error";
-            resultDiv.innerText = "Unexpected server response.";
-        }
-
-    } catch (error) {
-        loading.style.display = "none";
-        resultDiv.style.display = "block";
+    if (data.prediction === "human") {
+        resultDiv.className = "result-human";
+        resultDiv.innerHTML = `✅ Text detected as: HUMAN<br>${data.funny_response}`;
+    } 
+    else if (data.prediction === "ai") {
+        resultDiv.className = "result-ai";
+        resultDiv.innerHTML = `🤖 Text detected as: AI<br>${data.funny_response}`;
+    } 
+    else {
         resultDiv.className = "result-error";
-        resultDiv.innerText = "Server error. Ensure backend is running.";
+        resultDiv.innerText = "Unexpected server response.";
     }
+
+} catch (error) {
+    console.error(error); // Log error for debugging
+    loading.style.display = "none";
+    resultDiv.style.display = "block";
+    resultDiv.className = "result-error";
+    resultDiv.innerText = "Server error. Ensure backend is running.";
+}
+```
+
 }

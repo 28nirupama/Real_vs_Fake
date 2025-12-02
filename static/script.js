@@ -25,8 +25,11 @@ async function analyzeText() {
             body: formData
         });
 
-        const data = await response.json();
-        loading.style.display = "none";
+        const data = await response.json().catch(() => ({
+            prediction: "error",
+            funny_response: "Invalid response from server"
+        }));
+
 
         resultDiv.style.display = "block";
 

@@ -17,11 +17,11 @@ app.add_middleware(
 )
 
 # Serve frontend folder
-app.mount("/static", StaticFiles(directory="frontend"), name="static")
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 @app.get("/")
 async def serve_homepage():
-    return FileResponse("frontend/index.html")
+    return FileResponse("index.html")
 
 # Load trained artifacts
 model = joblib.load("ai_human_model.pkl")

@@ -18,7 +18,7 @@ def clean_text(text):
     return text.strip()
 
 # ----- Load data -----
-df = pd.read_csv("RF_data.csv")  # ensure file is in same folder
+df = pd.read_csv("training_data.csv")  # ensure file is in same folder
 print("Raw CSV shape:", df.shape)
 print("Columns:", df.columns.tolist())
 

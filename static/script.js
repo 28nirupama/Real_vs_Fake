@@ -19,9 +19,11 @@ async function analyzeText() {
         const formData = new FormData();
         formData.append("text", text);
 
-        const response = await fetch("/predict", {
-            method: "POST",
-            body: formData
+       const response = await fetch("https://your-backend-url.com/predict", {
+       method: "POST",
+       body: formData
+      });
+
         });
 
         const data = await response.json();

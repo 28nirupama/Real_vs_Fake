@@ -17,7 +17,7 @@ async function analyzeText() {
         const formData = new FormData();
         formData.append("text", text);
 
-        // 🔹 Replace this with your deployed backend URL if you have one
+        // Replace this with your deployed backend URL if you have one
         const backendURL = "http://127.0.0.1:8000/predict";
 
         const response = await fetch(backendURL, {
@@ -35,10 +35,10 @@ async function analyzeText() {
 
         if (data.prediction === "human") {
             resultDiv.className = "result-human";
-            resultDiv.innerHTML = "✅ Text detected as: HUMAN<br>" + data.funny_response;
+            resultDiv.innerHTML = `✅ Text detected as: HUMAN<br>${data.funny_response}`;
         } else if (data.prediction === "ai") {
             resultDiv.className = "result-ai";
-            resultDiv.innerHTML = "🤖 Text detected as: AI<br>" + data.funny_response;
+            resultDiv.innerHTML = `🤖 Text detected as: AI<br>${data.funny_response}`;
         } else {
             resultDiv.className = "result-error";
             resultDiv.innerText = "Unexpected response from server.";

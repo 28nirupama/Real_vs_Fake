@@ -17,7 +17,10 @@ async function analyzeText() {
         const formData = new FormData();
         formData.append("text", text);
 
-        const response = await fetch("/predict", {
+        // 🔹 Replace this URL with your deployed FastAPI backend
+        const backendURL = "https://real-vs-fake-api.onrender.com/predict";
+
+        const response = await fetch(backendURL, {
             method: "POST",
             body: formData
         });
@@ -43,5 +46,6 @@ async function analyzeText() {
         resultDiv.style.display = "block";
         resultDiv.className = "result-error";
         resultDiv.innerText = "Server error. Please check backend is running.";
+        console.error(err);
     }
 }

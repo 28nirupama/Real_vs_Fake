@@ -25,8 +25,6 @@ try {
         body: formData
     });
 
-    // Removed extra closing bracket here
-
     const data = await response.json();
 
     loading.style.display = "none";
@@ -35,12 +33,10 @@ try {
     if (data.prediction === "human") {
         resultDiv.className = "result-human";
         resultDiv.innerHTML = `✅ Text detected as: HUMAN<br>${data.funny_response}`;
-    } 
-    else if (data.prediction === "ai") {
+    } else if (data.prediction === "ai") {
         resultDiv.className = "result-ai";
         resultDiv.innerHTML = `🤖 Text detected as: AI<br>${data.funny_response}`;
-    } 
-    else {
+    } else {
         resultDiv.className = "result-error";
         resultDiv.innerText = "Unexpected server response.";
     }

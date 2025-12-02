@@ -19,7 +19,7 @@ async function analyzeText() {
         const formData = new FormData();
         formData.append("text", text);
 
-        const response = await fetch("/predict", {
+        const response = await fetch(" https://real-vs-fake-backend.onrender.com", {
             method: "POST",
             body: formData
         });

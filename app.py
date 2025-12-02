@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse
 import joblib
 import numpy as np
 from extra_features import ExtraFeatures
@@ -9,34 +9,28 @@ from scipy.sparse import hstack as sparse_hstack
 
 app = FastAPI()
 
-# Allow frontend access
+# CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],        # You can restrict later
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Serve static files
+# Static files
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
+# Serve frontend
 @app.get("/")
-async def home():
+async def serve_homepage():
     return FileResponse("index.html")
 
+# Load model
+model = joblib.load("ai_human_model.pkl")
+vectorizer = joblib.load("vectorizer.pkl")
+extra = ExtraFeatures()
 
-# -------- Load ML Model + Vectorizer ----------
-try:
-    model = joblib.load("ai_human_model.pkl")
-    vectorizer = joblib.load("vectorizer.pkl")
-    extra = ExtraFeatures()
-    print("✅ Model & Vectorizer Loaded Successfully")
-except Exception as e:
-    print("❌ Error loading model:", e)
-
-
-# Funny responses
 funny_responses = {
     "human": [
         "Detected: HUMAN 🤦, typos = proof of existence!",
@@ -65,28 +59,21 @@ funny_responses = {
 }
 
 
-# -------- Prediction Endpoint ----------
 @app.post("/predict")
 async def predict(text: str = Form(...)):
-    try:
-        clean_text = text.strip()
+    clean = text.strip()
 
-        # Vectorize + extra features
-        text_vec = vectorizer.transform([clean_text])
-        extra_vec = extra.transform([clean_text])
-
-        final_features = sparse_hstack([text_vec, extra_vec])
-
-        prediction = model.predict(final_features)[0]
-        funny = np.random.choice(funny_responses.get(prediction, ["No clue 😭"]))
-
+    if not clean:
         return {
-            "prediction": prediction,
-            "funny_response": funny
+            "prediction": "unknown",
+            "funny_response": "Please enter some text 😅"
         }
 
-    except Exception as e:
-        return JSONResponse(
-            status_code=500,
-            content={"error": f"Backend error: {str(e)}"}
-        )
+    vec = vectorizer.transform([clean])
+    extra_feat = extra.transform([clean])
+    final = sparse_hstack([vec, extra_feat])
+
+    pred = model.predict(final)[0]
+    reply = np.random.choice(funny_responses[pred])
+
+    return {"prediction": pred, "funny_response": reply}
